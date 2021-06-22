@@ -8,7 +8,7 @@ when that's undesirable.
 
 ## Install
 ```bash
-go get -u github.com/NYTimes/gziphandler
+go get -u github.com/mattermost/gziphandler
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ package main
 import (
 	"io"
 	"net/http"
-	"github.com/NYTimes/gziphandler"
+	"github.com/mattermost/gziphandler"
 )
 
 func main() {
@@ -52,5 +52,5 @@ The docs can be found at [godoc.org][docs], as usual.
 
 
 
-[docs]:     https://godoc.org/github.com/NYTimes/gziphandler
-[license]:  https://github.com/NYTimes/gziphandler/blob/master/LICENSE
+[docs]:     https://godoc.org/github.com/mattermost/gziphandler
+[license]:  https://github.com/mattermost/gziphandler/blob/master/LICENSE
