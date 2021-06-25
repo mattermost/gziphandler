@@ -170,6 +170,7 @@ func TestGzipHandlerNoBody(t *testing.T) {
 	}
 
 	for num, test := range tests {
+		test := test
 		handler := GzipHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(test.statusCode)
 			if test.body != nil {
@@ -238,6 +239,7 @@ func TestGzipHandlerContentLength(t *testing.T) {
 	go srv.Serve(ln)
 
 	for num, test := range tests {
+		test := test
 		srv.Handler = GzipHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if test.bodyLen > 0 {
 				w.Header().Set("Content-Length", strconv.Itoa(test.bodyLen))
@@ -433,7 +435,7 @@ func TestImplementCloseNotifier(t *testing.T) {
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
 	request.Header.Set(acceptEncoding, "gzip")
 	GzipHandler(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		_, ok := rw.(http.CloseNotifier)
+		_, ok := rw.(http.CloseNotifier) //nolint:staticcheck
 		assert.True(t, ok, "response writer must implement http.CloseNotifier")
 	})).ServeHTTP(&mockRWCloseNotify{}, request)
 }
@@ -442,7 +444,7 @@ func TestImplementFlusherAndCloseNotifier(t *testing.T) {
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
 	request.Header.Set(acceptEncoding, "gzip")
 	GzipHandler(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		_, okCloseNotifier := rw.(http.CloseNotifier)
+		_, okCloseNotifier := rw.(http.CloseNotifier) //nolint:staticcheck
 		assert.True(t, okCloseNotifier, "response writer must implement http.CloseNotifier")
 		_, okFlusher := rw.(http.Flusher)
 		assert.True(t, okFlusher, "response writer must implement http.Flusher")
@@ -453,7 +455,7 @@ func TestNotImplementCloseNotifier(t *testing.T) {
 	request := httptest.NewRequest(http.MethodGet, "/", nil)
 	request.Header.Set(acceptEncoding, "gzip")
 	GzipHandler(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		_, ok := rw.(http.CloseNotifier)
+		_, ok := rw.(http.CloseNotifier) //nolint:staticcheck
 		assert.False(t, ok, "response writer must not implement http.CloseNotifier")
 	})).ServeHTTP(httptest.NewRecorder(), request)
 }
@@ -580,6 +582,7 @@ var contentTypeTests = []struct {
 
 func TestContentTypes(t *testing.T) {
 	for _, tt := range contentTypeTests {
+		tt := tt
 		handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			w.Header().Set("Content-Type", tt.contentType)
